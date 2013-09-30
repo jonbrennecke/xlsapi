@@ -1,37 +1,34 @@
-#ifndef XLSSTREAM_H
-#define XLSSTREAM_H
+#ifndef XLSWORKSHEET_H
+#define XLSWORKSHEET_H
 
-#include "xlsworksheet.h"
+#include "xlstable.h"
+#include "../rapidxml-1.13/rapidxml.hpp"
+#include "sharedstrings.h"
 #include <string>
-#include <sstream>
 #include <vector>
-#include <fstream>
 
-class XlsStream
+class XlsWorksheet
 {
 public:
-	// vars
-	std::vector<XlsWorksheet*> worksheets;
 
-	// methods
-	XlsStream(char*);
-	~XlsStream();
-	void update();
-	XlsWorksheet* addWorksheet(std::string); 
-	void merge(XlsStream*, int, int);
-	void fromTxt(std::string);
+    // vars
+    std::vector<XlsTable*> tables; // used for *.xls format
+    std::vector<XlsRow*> rows; // used for *.xlsx format
+
+
+    // methods
+    XlsWorksheet(std::string);
+    ~XlsWorksheet();
+    std::string str();
+    XlsTable* addXlsTable();
+    XlsRow* addXlsxRow(rapidxml::xml_node<>*,SharedStrings*);
 
 private:
-	// vars
-	char* path;
-	std::string header;
-	std::string footer;
 
-	// methods
-	std::vector<std::string> split(std::string,char);
-	std::vector<std::string> getTstamp(XlsRow*);
-	int tstampCmp(std::vector<std::string>, std::vector<std::string>);
-
+    // vars
+    std::string name;
+    std::string header;
+    std::string footer;
 };
 
 #endif
