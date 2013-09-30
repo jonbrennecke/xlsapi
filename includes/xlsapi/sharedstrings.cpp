@@ -34,5 +34,6 @@ SharedStrings::SharedStrings(std::string path)
 /* return the string at index */
 std::string SharedStrings::index(int i)
 {
+    // return "here";
 	return this->strings[i];
 }

@@ -60,9 +60,18 @@ XlsCell* XlsRow::addXlsxCell(rapidxml::xml_node<>* cell, SharedStrings *sharedst
 {
     XlsCell* xcell = new XlsCell();
     this->cells.push_back(xcell);
-    rapidxml::xml_node<>* v = cell->first_node("v");
+    rapidxml::xml_node<>* v = cell->first_node("v"); 
+    rapidxml::xml_attribute<>* t = cell->first_attribute("t");
     int value = atoi(v->value());
-    xcell->setValue(sharedstr->index(value));
+    if(t==NULL)
+    {
+        xcell->setValue(v->value());
+    }
+    else {
+        // if(t->value()=="s") TODO implement this; right now we're only considering one case
+        sharedstr->index(value);
+        xcell->setValue(sharedstr->index(value));
+    }
     return xcell;
 }
 

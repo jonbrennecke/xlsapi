@@ -208,7 +208,6 @@ void XlsStream::fromXls(std::string path)
 void XlsStream::fromXlsx(std::string path)
 {
     this->sharedstr = new SharedStrings(path);
-
     std::vector<std::string> sheets = this->getXlsxSheetNames(path);
     for(unsigned int i=0;i<sheets.size();i++)
     {
@@ -241,8 +240,8 @@ std::vector<std::string> XlsStream::getXlsxSheetNames(std::string path)
     std::vector<std::string> sheetnames;
     while (sheet != NULL)
     {
-        std::string name = sheet->first_attribute("name")->value(); 
-        sheetnames.push_back(name);
+        std::string name = sheet->first_attribute("sheetId")->value(); 
+        sheetnames.push_back("sheet" + name);
         sheet = sheet->next_sibling("sheet");
     }
     return sheetnames;
@@ -285,10 +284,8 @@ int XlsStream::tstampCmp(std::vector<std::string> tstamp1, std::vector<std::stri
     int m2 = atoi(tstamp2[1].c_str()) * 60;
     int h1 = atoi(tstamp1[0].c_str()) * 60;
     int h2 = atoi(tstamp2[0].c_str()) * 60;
-
     int t1 = h1  + m1 + s1;
     int t2 = h2  + m2 + s2;
-
     return t2 - t1;
 }
 

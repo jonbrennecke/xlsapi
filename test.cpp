@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 	// std::vector<std::string> args(argv + 1,argv + argc + !argc);
 
 	XlsStream *xlsApp = new XlsStream();
-	xlsApp->fromXlsx("test.xlsx");
+	xlsApp->fromXlsx("minmax.xlsx");
 
 	xlsApp->setPath("test.xls");
 	xlsApp->saveXls();
