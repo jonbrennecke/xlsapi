@@ -99,8 +99,14 @@ XlsWorksheet* XlsStream::addXlsxSheet(std::string path, std::string sheetname)
     rapidxml::xml_node<>* wsheet = doc.first_node("worksheet");
     rapidxml::xml_node<>* sheetData = wsheet->first_node("sheetData");
     rapidxml::xml_node<>* row = sheetData->first_node("row");
+    std::vector<int> indices;
     while (row != NULL)
     {
+        indices.push_back(atoi(row->first_attribute("r")->value()));
+        int diff = indices.back() - indices[indices.size()-2] -1;
+        if(diff) { // handle any empty rows
+            for(unsigned int i=0; i<diff;i++) sheet->addEmptyRow();
+        }
         sheet->addXlsxRow(row,this->sharedstr);
         row = row->next_sibling("row");
     }
@@ -206,7 +212,7 @@ void XlsStream::fromXlsx(std::string path)
     std::vector<std::string> sheets = this->getXlsxSheetNames(path);
     for(unsigned int i=0;i<sheets.size();i++)
     {
-        // add XlsWorksheet & XlsTable
+        // add XlsWorksheet
         std::transform(sheets[i].begin(), sheets[i].end(), sheets[i].begin(), ::tolower);
         this->addXlsxSheet(path,sheets[i]);
     }

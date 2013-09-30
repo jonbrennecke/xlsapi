@@ -64,3 +64,13 @@ XlsRow* XlsWorksheet::addXlsxRow(rapidxml::xml_node<>* row, SharedStrings* share
     }
     return xrow;
 }
+
+/* 
+*   add a blank row to the worksheet
+*/
+XlsRow* XlsWorksheet::addEmptyRow()
+{
+    XlsRow* xrow = new XlsRow();
+    this->rows.push_back(xrow);
+    return xrow;
+}
