@@ -6,17 +6,17 @@
 class XlsCell
 {
 public:
-	XlsCell();
-	~XlsCell();
-	void setValue(std::string);
-	void setColor(std::string);
-	std::string getValue();
-	std::string str();
+    XlsCell();
+    ~XlsCell();
+    void setValue(std::string);
+    void setColor(std::string);
+    std::string getValue();
+    std::string str();
 
 private:
-	std::string header;
-	std::string footer;
-	std::string value;
+    std::string header;
+    std::string footer;
+    std::string value;
 };
 
 #endif
