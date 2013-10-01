@@ -23,6 +23,7 @@ public:
     XlsTable* addXlsTable();
     XlsRow* addXlsxRow(rapidxml::xml_node<>*,SharedStrings*);
     XlsRow* addEmptyRow();
+    std::string getName();
 
 private:
 

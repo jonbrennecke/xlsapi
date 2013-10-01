@@ -1,12 +1,12 @@
 #include "xlsrow.h"
 #include "xlstable.h"
-// #include "sharedstrings.h"
 #include "../rapidxml-1.13/rapidxml.hpp"
 #include <vector>
 #include <string>
 #include <sstream>
 #include <iostream>
 #include <cstdlib>
+#include <cstring>
 
 /* Constructor */
 XlsRow::XlsRow()
@@ -59,7 +59,28 @@ XlsCell* XlsRow::addXlsCell()
 XlsCell* XlsRow::addXlsxCell(rapidxml::xml_node<>* cell, SharedStrings *sharedstr)
 {
     XlsCell* xcell = new XlsCell();
-    this->cells.push_back(xcell);
+
+    rapidxml::xml_node<>* prev = cell->previous_sibling("c");
+    if(prev!=NULL)
+    {
+        int before = (int)prev->first_attribute("r")->value()[0];
+        int after = (int)cell->first_attribute("r")->value()[0]; 
+        int diff = after - before;
+        if(strlen(prev->first_attribute("r")->value())==3)
+        {
+            int before2 = (int)prev->first_attribute("r")->value()[1];
+            int after2 = (int)cell->first_attribute("r")->value()[1];
+            int diff2 = after2 - before2;
+            diff = 24*diff + diff2;
+        }
+        if(diff)
+        {
+            for(int i=0;i<diff-1;i++)
+            {
+                this->cells.push_back(new XlsCell());
+            }
+        }
+    }
     rapidxml::xml_node<>* v = cell->first_node("v"); 
     rapidxml::xml_attribute<>* t = cell->first_attribute("t");
     int value = atoi(v->value());
@@ -72,6 +93,7 @@ XlsCell* XlsRow::addXlsxCell(rapidxml::xml_node<>* cell, SharedStrings *sharedst
         sharedstr->index(value);
         xcell->setValue(sharedstr->index(value));
     }
+    this->cells.push_back(xcell);
     return xcell;
 }
 

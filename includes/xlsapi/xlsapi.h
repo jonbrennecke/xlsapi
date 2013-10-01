@@ -38,7 +38,6 @@ private:
     SharedStrings *sharedstr;
 
     // methods
-    std::vector<std::string> split(std::string,char);
     std::vector<std::string> getXlsxSheetNames(std::string);
 
 

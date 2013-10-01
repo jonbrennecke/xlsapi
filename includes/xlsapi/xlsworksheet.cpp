@@ -74,3 +74,9 @@ XlsRow* XlsWorksheet::addEmptyRow()
     this->rows.push_back(xrow);
     return xrow;
 }
+
+/* getter method for name */
+std::string XlsWorksheet::getName()
+{
+    return this->name;
+}

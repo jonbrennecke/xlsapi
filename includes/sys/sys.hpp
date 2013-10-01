@@ -1,18 +1,33 @@
-#ifndef SYS_H
-#define SYS_H
+// #ifndef SYS_H
+// #define SYS_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 namespace sys {
 
 	/*
+	*  std::getline will usually split a string at '\n', however, we can choose a
+	*  cusom string delimiter
+	*/
+	static std::vector<std::string> split(std::string s,char delim)
+	{
+	    std::vector<std::string> matches;
+	    std::istringstream iss(s);
+	    std::string token;
+	    while(std::getline(iss, token, delim))
+	        matches.push_back(token);
+	    return matches;
+	}
+
+	/*
 	*	getline implementation for grabbing stdin
 	*/
-	bool getl(FILE *f,std::string &line)
+	static bool getl(FILE *f,std::string &line)
 	{
 		if (f == NULL) return false;
 		else {
@@ -28,7 +43,7 @@ namespace sys {
 	/*
 	*	send's "command" to terminal/cmd.exe and returns the result as a string
 	*/
-	std::string terminal(std::string command)
+	static std::string terminal(std::string command)
 	{
 		FILE *file = popen(command.c_str(), "r");
 		std::stringstream ss;
@@ -43,4 +58,4 @@ namespace sys {
 
 }
 
-#endif
+// #endif

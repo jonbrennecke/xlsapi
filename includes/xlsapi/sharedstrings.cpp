@@ -1,4 +1,5 @@
 #include "sharedstrings.h"
+#include "../sys/sys.hpp"
 #include "../rapidxml-1.13/rapidxml.hpp"
 #include <vector>
 

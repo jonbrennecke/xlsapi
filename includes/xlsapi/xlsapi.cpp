@@ -134,8 +134,8 @@ void XlsStream::merge(XlsStream* xls2, int worksheetIndex, int tableIndex)
 
             // TODO clean this part up
             std::string full = table2->rows.back()->cells[0]->getValue();
-            std::vector<std::string> matches = this->split(full,',');
-            std::vector<std::string> t = this->split(matches[1],' ');
+            std::vector<std::string> matches = sys::split(full,',');
+            std::vector<std::string> t = sys::split(matches[1],' ');
             std::string date = matches[0];
             std::string meridian = t[1];
 
@@ -181,7 +181,7 @@ void XlsStream::fromTxt(std::string s)
     while(std::getline(ifs,line))
     {
         XlsRow *row = table->addRow();
-        std::vector<std::string> matches = this->split(line,'\t');
+        std::vector<std::string> matches = sys::split(line,'\t');
         for(unsigned int i=0;i<matches.size();i++)
         {
             XlsCell *cell = row->addXlsCell();
@@ -248,28 +248,14 @@ std::vector<std::string> XlsStream::getXlsxSheetNames(std::string path)
 }
 
 /*
-*  std::getline will usually split a string at '\n', however, we can choose a
-*  cusom string delimiter
-*/
-std::vector<std::string> XlsStream::split(std::string s,char delim)
-{
-    std::vector<std::string> matches;
-    std::istringstream iss(s);
-    std::string token;
-    while(std::getline(iss, token, delim))
-        matches.push_back(token);
-    return matches;
-}
-
-/*
 * given a row, return the timestamp as an std::vector<std::string> of hour, minute, second
 */
 std::vector<std::string> XlsStream::getTstamp(XlsRow* row)
 {
     std::string tstamp = row->cells[0]->getValue();
-    std::vector<std::string> matches = this->split(tstamp,',');
-    std::vector<std::string> t = this->split(matches[1],' ');
-    std::vector<std::string> ts = this->split(t[0],':');
+    std::vector<std::string> matches = sys::split(tstamp,',');
+    std::vector<std::string> t = sys::split(matches[1],' ');
+    std::vector<std::string> ts = sys::split(t[0],':');
     return ts;
 }
 
