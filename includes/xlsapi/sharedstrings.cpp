@@ -3,6 +3,9 @@
 #include "../rapidxml-1.13/rapidxml.hpp"
 #include <vector>
 
+
+#include "../mex/mex.h"
+
 // TODO simple hack to fix inclusion error of sys namespace
 namespace sys {
     std::string terminal(std::string command);

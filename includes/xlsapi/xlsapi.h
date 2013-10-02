@@ -21,6 +21,7 @@ public:
     ~XlsStream();
     XlsWorksheet* addXlsWorksheet(std::string);
     XlsWorksheet* addXlsxSheet(std::string, std::string);
+    XlsWorksheet* getSheet(int);
     void saveXls();
     void saveXlsx(); // TODO
     void merge(XlsStream*, int, int);

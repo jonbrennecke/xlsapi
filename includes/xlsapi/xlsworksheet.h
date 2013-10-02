@@ -17,12 +17,14 @@ public:
 
 
     // methods
+    XlsWorksheet();
     XlsWorksheet(std::string);
     ~XlsWorksheet();
     std::string str();
     XlsTable* addXlsTable();
     XlsRow* addXlsxRow(rapidxml::xml_node<>*,SharedStrings*);
     XlsRow* addEmptyRow();
+    XlsRow* getRow(int);
     std::string getName();
 
 private:

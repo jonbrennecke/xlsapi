@@ -1,10 +1,13 @@
-#ifndef __CLASS_HANDLE_HPP__
-#define __CLASS_HANDLE_HPP__
-#include "../../mex/mex.h"
+#ifdef _MSC_VER
+typedef __int32 int32_t;
+typedef unsigned __int32 uint32_t;
+typedef unsigned __int64 uint64_t;
+#else
 #include <stdint.h>
-#include <string>
+#endif
 #include <cstring>
 #include <typeinfo>
+#include <string>
 
 #define CLASS_HANDLE_SIGNATURE 0xFF00F0A5
 
@@ -15,7 +18,7 @@ public:
     ~class_handle() { signature_m = 0; delete ptr_m; }
     bool isValid() { return ((signature_m == CLASS_HANDLE_SIGNATURE) && !strcmp(name_m.c_str(), typeid(base).name())); }
     base *ptr() { return ptr_m; }
-
+    
 private:
     uint32_t signature_m;
     std::string name_m;
@@ -47,8 +50,13 @@ template<class base> inline base *convertMat2Ptr(const mxArray *in)
 
 template<class base> inline void destroyObject(const mxArray *in)
 {
-    delete convertMat2HandlePtr<base>(in);
+    delete convertMat2Ptr<base>(in);
     mexUnlock();
 }
 
-#endif // __CLASS_HANDLE_HPP__
+char* cstrFromMx(const mxArray* input)
+{
+    char* cstr;
+    cstr = mxArrayToString(input);
+    return cstr;
+}

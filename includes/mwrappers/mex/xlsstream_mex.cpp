@@ -3,55 +3,57 @@
 #include "mexutils.hpp"
 #include <string>
 #include <stdio.h>
-
-char* cstrFromMx(const mxArray* input)
-{
-	char* cstr;
-    cstr = mxArrayToString(input);
-    return cstr;
-}
+#include <typeinfo>
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
-	// char *cmd;
- //    cmd = mxArrayToString(prhs[0]);
- //    mexPrintf("%s\n", cmd);
-
 	char* cmd = cstrFromMx(prhs[0]);
-	mexPrintf("%s\n", cmd);
 
     /* Constructor */
     if(!strcmp("new", cmd))
     {
         if (nlhs != 1)
             mexErrMsgTxt("Constructor: One output expected.");
+        
         // Return a handle to a new C++ instance
-        plhs[0] = convertPtr2Mat<XlsStream>(new XlsStream);
+        XlsStream *xls = new XlsStream();
+        plhs[0] = convertPtr2Mat<XlsStream>(xls);
         return;
     }
 
     /* Destructor */
-    if(!strcmp("pss", cmd)) 
+    if(!strcmp("delete", cmd)) 
     {
         destroyObject<XlsStream>(prhs[1]);
         return;
     }
 
     // Get instance pointer from the second input
-    XlsStream *xlsstream_instance = convertMat2Ptr<XlsStream>(prhs[1]);
+    XlsStream *xls = convertMat2Ptr<XlsStream>(prhs[1]);
   
   	/* saveXls() */
     if(!strcmp("saveXls", cmd)) 
     {
-        xlsstream_instance->saveXls();
+        xls->saveXls();
         return;
     }
 
     /* fromXlsx(std::string) */
     if(!strcmp("fromXlsx", cmd))
     {
-    	char* path = cstrFromMx(prhs[1]);
-	    xlsstream_instance->fromXlsx(path);
+    	char* path = cstrFromMx(prhs[2]);
+        xls->fromXlsx(path);
+        return;
+    }
+
+    /* getSheet */
+    if(!strcmp("getSheet", cmd))
+    {
+        char* index = cstrFromMx(prhs[2]);
+        XlsWorksheet* wsheet = xls->getSheet(atoi(index));
+        // mexMakeMemoryPersistent(wsheet);
+        plhs[0] = convertPtr2Mat(wsheet);
+        // plhs[0] =  convertPtr2Mat<XlsWorksheet>(new class_handle<XlsWorksheet>(wsheet));
         return;
     }
 

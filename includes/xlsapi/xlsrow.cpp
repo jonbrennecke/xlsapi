@@ -97,6 +97,12 @@ XlsCell* XlsRow::addXlsxCell(rapidxml::xml_node<>* cell, SharedStrings *sharedst
     return xcell;
 }
 
+/* get the cell at index */
+XlsCell* XlsRow::getCell(int index)
+{
+    return this->cells[index];
+}
+
 /* set the cell at i to value */
 void XlsRow::setCell(int i, std::string value)
 {

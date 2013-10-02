@@ -23,6 +23,7 @@ public:
     ~XlsRow();
     XlsCell* addXlsCell();
     XlsCell* addXlsxCell(rapidxml::xml_node<>*, SharedStrings *sharedstr);
+    XlsCell* getCell(int);
     void setCell(int, std::string);
     std::string str();
     XlsRow* copy();

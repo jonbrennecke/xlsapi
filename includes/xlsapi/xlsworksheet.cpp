@@ -6,6 +6,14 @@
 #include <iostream>
 
 /* Constructor */
+XlsWorksheet::XlsWorksheet() 
+{
+    this->name = "Sheet1";
+    this->header = "<Worksheet ss:Name=\"" + name + "\">\n";
+    this->footer = "</Worksheet>\n"; 
+}
+
+/* Constructor */
 XlsWorksheet::XlsWorksheet(std::string name)
 {
     this->name = name;
@@ -73,6 +81,11 @@ XlsRow* XlsWorksheet::addEmptyRow()
     XlsRow* xrow = new XlsRow();
     this->rows.push_back(xrow);
     return xrow;
+}
+
+XlsRow* XlsWorksheet::getRow(int index)
+{
+    return this->rows[index];
 }
 
 /* getter method for name */

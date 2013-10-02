@@ -113,6 +113,12 @@ XlsWorksheet* XlsStream::addXlsxSheet(std::string path, std::string sheetname)
     return sheet;
 }
 
+/* get the worksheet at index */
+XlsWorksheet* XlsStream::getSheet(int index)
+{
+    return this->worksheets[index];
+}
+
 /* Merge two XlsStream objects */
 void XlsStream::merge(XlsStream* xls2, int worksheetIndex, int tableIndex)
 {
