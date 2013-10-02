@@ -4,7 +4,7 @@
 ##
 #########################################################
 
-PROJECT = xlsstream_mex
+PROJECT = xlsworksheet_mex
 CC = gcc
 CXX = g++
 CFLAGS = -Wall -pedantic
@@ -13,7 +13,8 @@ MATLABROOT = /usr/local/MATLAB/R2013a/
 MEX = $(MATLABROOT)bin/mex
 MATLAB = 
 MEXFLAGS = -cxx
-CXXOUT =  
+CXXOUT = 
+MOUSEDIR = ../mouse/
 MOUSE = mouse.cpp
 XLSAPI = xlsapi.cpp xlsworksheet.cpp xlstable.cpp xlsrow.cpp xlscell.cpp sharedstrings.cpp
 INCLPATH = ../
@@ -22,18 +23,21 @@ CXXOUTFILES = $(subst .cpp,.o, $(XLSAPI))
 OPATH = ./build/
 OUTDIR = ./mex/
 OLIST = $(addprefix $(OPATH),$(subst .cpp,.o, $(XLSAPI)))
-MAIN = ./mex/xlsstream_mex.cpp
+MAIN = ./mex/xlsworksheet_mex.cpp
 MAINOBJ = $(subst .cpp,.o,$(MAIN))
 
 all: mex
 
+mouse: $(CXXFILES)
+	$(CXX) $(CXXFLAGS) -o $(OPATH)$(subst .cpp,.o,$(MOUSE)) -c $(MOUSEDIR)$(MOUSE)
+
 $(CXXFILES):
 	$(CXX) $(CXXFLAGS) -o $(addprefix $(OPATH),$(subst .cpp,.o, $@)) -c $(addprefix $(INCLPATH)xlsapi/, $@) 
 
-main:
+main: mouse
 	$(CXX) $(CXXFLAGS) -o $(MAINOBJ) -c $(MAIN)
 
-mex:$(CXXFILES) main
-	$(MEX) $(MEXFLAGS) -lm $(addprefix $(OPATH),$(subst .cpp,.o, $(CXXFILES))) $(MAINOBJ) -outdir $(OUTDIR) -output $(PROJECT)
+mex: main
+	$(MEX) $(MEXFLAGS) -lm $(addprefix $(OPATH),$(subst .cpp,.o, $(CXXFILES))) $(OPATH)$(subst .cpp,.o,$(MOUSE)) $(MAINOBJ) -outdir $(OUTDIR) -output $(PROJECT)
 
 
