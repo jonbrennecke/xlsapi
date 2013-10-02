@@ -1,10 +1,13 @@
 #include "includes/mouse/mouse.h"
 #include "includes/sys/sys.hpp"
 #include "includes/xlsapi/xlsapi.h"
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
 
+template <typename T, size_t N> const T* mybegin(const T (&a)[N]) { return a; }    
+template <typename T, size_t N> const T* myend  (const T (&a)[N]) { return a+N; }
 
 int main(int argc, char *argv[])
 {
@@ -25,12 +28,34 @@ int main(int argc, char *argv[])
 	for(int i=0;i<mouse->trig.size();i++)
 	{
 		float t = mouse->trig[i];
-		if(t<=0) break; // are we greater than zero?
+		if(t<=0) continue; // are we greater than zero?
 		if(i>20 && i<(mouse->trig.size()-20)){
-			for(int j=i-20;j<i+20;j++) // greater than surrounding neighborhood? (+- 20 values)
+
+			std::vector<float>::const_iterator first = mouse->trig.begin() + i-20;
+			std::vector<float>::const_iterator last = mouse->trig.begin() + i+20;
+			std::vector<float>::const_iterator mid = mouse->trig.begin() + i;
+			// std::vector<float> subsection(first, last);
+
+			float max = *std::max_element(first,last);
+			if(t>=max)
 			{
-				if()
+				// max of 20 surrounding values
 			}
+
+
+
+
+
+			// for(int j=0;j<sub.size();j++)
+			// {
+			// 	if()
+			// }
+
+			// const float[] before = mouse->trig[i-20]
+			// for(int j=i-20;j<i+20;j++) // greater than surrounding neighborhood? (+- 20 values)
+			// {
+			// 	// if()
+			// }
 		}
 	}
 
