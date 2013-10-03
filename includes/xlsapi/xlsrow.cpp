@@ -71,7 +71,7 @@ XlsCell* XlsRow::addXlsxCell(rapidxml::xml_node<>* cell, SharedStrings *sharedst
             int before2 = (int)prev->first_attribute("r")->value()[1];
             int after2 = (int)cell->first_attribute("r")->value()[1];
             int diff2 = after2 - before2;
-            diff = 24*diff + diff2;
+            diff = diff + diff2;
         }
         if(diff)
         {
@@ -83,15 +83,18 @@ XlsCell* XlsRow::addXlsxCell(rapidxml::xml_node<>* cell, SharedStrings *sharedst
     }
     rapidxml::xml_node<>* v = cell->first_node("v"); 
     rapidxml::xml_attribute<>* t = cell->first_attribute("t");
-    int value = atoi(v->value());
-    if(t==NULL)
+    if(v!=NULL)
     {
-        xcell->setValue(v->value());
-    }
-    else {
-        // if(t->value()=="s") TODO implement this; right now we're only considering one case
-        sharedstr->index(value);
-        xcell->setValue(sharedstr->index(value));
+        int value = atoi(v->value());
+        if(t==NULL)
+        {
+            xcell->setValue(v->value());
+        }
+        else {
+            // if(t->value()=="s") TODO implement this; right now we're only considering one case
+            sharedstr->index(value);
+            xcell->setValue(sharedstr->index(value));
+        }
     }
     this->cells.push_back(xcell);
     return xcell;

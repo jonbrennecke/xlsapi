@@ -20,9 +20,10 @@ public:
     XlsStream();
     ~XlsStream();
     XlsWorksheet* addXlsWorksheet(std::string);
+    XlsWorksheet* addXlsWorksheet(XlsWorksheet*);
     XlsWorksheet* addXlsxSheet(std::string, std::string);
     XlsWorksheet* getSheet(int);
-    void saveXls();
+    void saveXls(const char*);
     void saveXlsx(); // TODO
     void merge(XlsStream*, int, int);
     void fromTxt(std::string);

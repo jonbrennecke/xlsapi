@@ -15,8 +15,8 @@ classdef xlsstream < handle
         end
 
         % saveXls
-        function varargout = saveXls(this, varargin)
-            [varargout{1:nargout}] = xlsstream_mex('saveXls', this.objectHandle, varargin{:});
+        function saveXls(this, varargin)
+            xlsstream_mex('saveXls', this.objectHandle, varargin{:});
         end
 
         % fromXlsx
@@ -31,5 +31,11 @@ classdef xlsstream < handle
             wsheet.setHandle(ptr);
         end
 
+        % addWorksheet
+        function addWorksheet(this, sheet)
+            xlsstream_mex('addWorksheet', this.objectHandle, sheet.objectHandle);
+            % wsheet = xlsworksheet;
+            % wsheet.setHandle(ptr);
+        end
     end
 end

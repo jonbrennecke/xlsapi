@@ -55,6 +55,13 @@ XlsTable* XlsWorksheet::addXlsTable()
     return table;
 }
 
+/* add the given row */
+XlsRow* XlsWorksheet::addRow(XlsRow* row)
+{
+    this->rows.push_back(row);
+    return row;
+}
+
 /* 
 *   add a row to the worksheet in *.xlsx format 
 *   XLSX format doesn't use tables, so we bypass the tables vector

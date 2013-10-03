@@ -44,25 +44,22 @@ XlsStream::XlsStream()
 XlsStream::~XlsStream(){}
 
 /* save the data stream as a *.xls file */
-void XlsStream::saveXls()
+void XlsStream::saveXls(const char* path)
 {
-    if(this->path)
+    // open & print header
+    std::ofstream file;
+    file.open(path);
+    file << this->header;
+
+    // print contents of worksheets
+    for(int i=0;(unsigned int)i<this->worksheets.size();i++)
     {
-        // open & print header
-        std::ofstream file;
-        file.open(this->path);
-        file << this->header;
-
-        // print contents of worksheets
-        for(int i=0;(unsigned int)i<this->worksheets.size();i++)
-        {
-            file << this->worksheets[i]->str();
-        }
-
-        // print footer & close
-        file << this->footer;
-        file.close();
+        file << this->worksheets[i]->str();
     }
+
+    // print footer & close
+    file << this->footer;
+    file.close();
 }
 
 /* save the data stream as a *.xlsx file */
@@ -75,6 +72,13 @@ void XlsStream::saveXlsx()
 XlsWorksheet* XlsStream::addXlsWorksheet(std::string name)
 {
     XlsWorksheet* sheet = new XlsWorksheet(name);
+    this->worksheets.push_back(sheet);
+    return sheet;
+}
+
+/* add the given worksheet */
+XlsWorksheet* XlsStream::addXlsWorksheet(XlsWorksheet* sheet)
+{
     this->worksheets.push_back(sheet);
     return sheet;
 }

@@ -34,7 +34,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   	/* saveXls() */
     if(!strcmp("saveXls", cmd)) 
     {
-        xls->saveXls();
+        char* path = cstrFromMx(prhs[2]);
+        xls->saveXls(path);
         return;
     }
 
@@ -51,9 +52,16 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     {
         char* index = cstrFromMx(prhs[2]);
         XlsWorksheet* wsheet = xls->getSheet(atoi(index));
-        // mexMakeMemoryPersistent(wsheet);
         plhs[0] = convertPtr2Mat(wsheet);
-        // plhs[0] =  convertPtr2Mat<XlsWorksheet>(new class_handle<XlsWorksheet>(wsheet));
+        return;
+    }
+
+    /* addWorksheet */
+    if(!strcmp("addWorksheet", cmd))
+    {
+        XlsWorksheet* sheet = convertMat2Ptr<XlsWorksheet>(prhs[2]);
+        xls->addXlsWorksheet(sheet);
+        // plhs[0] = convertPtr2Mat<XlsWorksheet>(sheet);
         return;
     }
 

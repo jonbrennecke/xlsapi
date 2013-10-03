@@ -4,7 +4,7 @@
 ##
 #########################################################
 
-PROJECT = xlsworksheet_mex
+PROJECT = xlsrow_mex
 CC = gcc
 CXX = g++
 CFLAGS = -Wall -pedantic
@@ -23,7 +23,7 @@ CXXOUTFILES = $(subst .cpp,.o, $(XLSAPI))
 OPATH = ./build/
 OUTDIR = ./mex/
 OLIST = $(addprefix $(OPATH),$(subst .cpp,.o, $(XLSAPI)))
-MAIN = ./mex/xlsworksheet_mex.cpp
+MAIN = ./mex/xlsrow_mex.cpp
 MAINOBJ = $(subst .cpp,.o,$(MAIN))
 
 all: mex
