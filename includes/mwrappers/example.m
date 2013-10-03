@@ -14,7 +14,7 @@ m = mouse(row);
 
 r = xlsrow;
 d = m.data;
-r.fromStr(d);
+r.addCellsFromStrings(d);
 
 % xlsapp2.saveXls('test.xls');
 

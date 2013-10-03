@@ -42,6 +42,22 @@ XlsRow::XlsRow(XlsTable* parent, std::vector<std::string>)
     this->footer = "\t</Row>\n";
 }
 
+/*
+*   Alternate constructor
+*   TODO
+*/
+XlsRow::XlsRow(std::vector<std::string> str)
+{
+    this->header = "\t<Row>\n";
+    this->footer = "\t</Row>\n";
+    for(int i=0;i<str.size();i++)
+    {
+        XlsCell *cell = new XlsCell();
+        cell->setValue(str[i]);
+        this->cells.push_back(cell);
+    }
+}
+
 /* Destructor */
 XlsRow::~XlsRow(){}
 
@@ -51,6 +67,12 @@ XlsCell* XlsRow::addXlsCell()
     this->parent->expColCount += 1;
     this->parent->updateHeader();
     XlsCell* cell = new XlsCell();
+    this->cells.push_back(cell);
+    return cell;
+}
+
+XlsCell* XlsRow::addXlsCell(XlsCell* cell)
+{
     this->cells.push_back(cell);
     return cell;
 }

@@ -67,6 +67,20 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         return;
     }
 
+    /* get the private data as a matrix */
+    if(!strcmp("data2", cmd)) 
+    {
+        std::vector<char*> info = mouse->getData();
+        const char *str[info.size()];
+        const mwSize ndim=1, dims[]={info.size()}; 
+        mxArray *mx = mxCreateCellArray(ndim,dims);
+        for(int i=0;i<info.size();i++) {
+            mxArray* value = mxCreateString(info[i]);
+            mxSetCell(mx,i,value);
+        }
+        plhs[0] = mx;
+        return;
+    }
 
 
     mxFree(cmd);

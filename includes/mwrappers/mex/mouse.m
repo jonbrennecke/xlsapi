@@ -26,7 +26,7 @@ classdef mouse < handle
 
         % get mouse private  data as cell array
         function result = data(this)
-            result = mouse_mex('data', this.objectHandle);
+            result = mouse_mex('data2', this.objectHandle);
         end
     end
 end

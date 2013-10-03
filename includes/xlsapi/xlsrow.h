@@ -20,8 +20,10 @@ public:
     XlsRow(XlsTable*);
     XlsRow(const XlsRow&);
     XlsRow(XlsTable*, std::vector<std::string>);
+    XlsRow(std::vector<std::string>);
     ~XlsRow();
     XlsCell* addXlsCell();
+    XlsCell* addXlsCell(XlsCell*);
     XlsCell* addXlsxCell(rapidxml::xml_node<>*, SharedStrings *sharedstr);
     XlsCell* getCell(int);
     void setCell(int, std::string);

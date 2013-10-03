@@ -30,8 +30,8 @@ classdef xlsrow < handle
         end
 
         % return the cells as strings
-        function fromStr(this, str)
-            xlsrow_mex('fromStr', this.objectHandle, str);
+        function addCellsFromStrings(this, str)
+            xlsrow_mex('addCellsFromStrings', this.objectHandle, str);
         end
     end
 end

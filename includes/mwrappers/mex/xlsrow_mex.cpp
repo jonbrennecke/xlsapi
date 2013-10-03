@@ -51,37 +51,21 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
     /* build the row from an mxMatrix */
-    if(!strcmp("fromStr", cmd)) 
+    if(!strcmp("addCellsFromStrings", cmd)) 
     {
-        std::vector<char*> v;
-
-        // const mxArray *data = prhs[3];
-
-        int m = mxGetM(prhs[2]);
-        int n = mxGetN(prhs[2]);
-        char str[m];
-        mxGetString(prhs[2], str, n);
-        mexPrintf(str);
-        // mxGetString(prhs[3],);
-        // if(data==NULL)
-        // {
-        //     mexPrintf("here");
-        // }
-        // mwSize size = mxGetNumberOfElements(data);
-        // char* str = cstrFromMx(prhs[3]);
-
-        // mwSize size = mxGetNumberOfElements(data);
-        // mwIndex index;
-        // const mxArray *element;
-        // mexPrintf("size: %s\n",str);
-        // for(int i=0;i<size;i++)
-        // {
-        // //     // data[i];
-        // //     // v.push_back(cstrFromMx(prhs[i]));
-        // }
-
-        // nfields = mxGetNumberOfFields(prhs[0]);
-        // NStructElems = mxGetNumberOfElements(prhs[0]);
+        const mxArray *data = prhs[2];
+        int n = mxGetM(data);
+        for(int i=0;i<n;i++)
+        {
+            mxArray *mx = mxGetCell(data, i);
+            char* cstr = cstrFromMx(mx);
+            if(cstr!=NULL)
+            {
+                std::string str = std::string(cstr);
+                XlsCell *cell = new XlsCell(str); 
+                row->addXlsCell(cell);
+            }          
+        }
         return;
     }
     
