@@ -16,7 +16,7 @@ r = xlsrow;
 d = m.data;
 r.addCellsFromStrings(d);
 
-% xlsapp2.saveXls('test.xls');
+xlsapp2.saveXls('test.xls');
 
 % sheet 0 = 40Hz unscored
 % sheet 1 = 40Hz SWS
@@ -24,56 +24,54 @@ r.addCellsFromStrings(d);
 % sheet 4 = 
 % ...it appears that the sheets are in reverse order. Maybe fix this?
 
+t = m.trig();
+r = m.rand();
 
+sizen = row.numel();
+sizet = numel(t);
+sizer = numel(r);
 
-% t = m.trig();
-% r = m.rand();
+% loop through trigger values
+for i=1:sizet
+	value = t(i);
 
-% sizen = row.numel();
-% sizet = numel(t);
-% sizer = numel(r);
+	% are we greater than 0
+	if value>0
+		if ((i>20) && (i<(sizet-20)))
+			neighborhood = t(i-20:i+20);
+			largest = max(neighborhood);
 
-% % loop through trigger values
-% for i=1:sizet
-% 	value = t(i);
+			% are we greater than (or equal to) surrounding neighborhood (i.e. local maxima)
+			if value >= largest
 
-% 	% are we greater than 0
-% 	if value>0
-% 		if ((i>20) && (i<(sizet-20)))
-% 			neighborhood = t(i-20:i+20);
-% 			largest = max(neighborhood);
+				% check slope  (might be redundant)
+				slopefwd  = (value-t(i-20))/20;
+				slopebkwd = (t(i+20)-value)/20;
+				if(slopefwd > 0 && slopebkwd < 0)
+					% disp(value);
+				end
+			end
+		end
 
-% 			% are we greater than (or equal to) surrounding neighborhood (i.e. local maxima)
-% 			if value >= largest
+	% are we less than 0
+	elseif value<0
+		if ((i>20) && (i<(sizet-20)))
+			neighborhood = t(i-20:i+20);
+			largest = max(neighborhood);
 
-% 				% check slope  (might be redundant)
-% 				slopefwd  = (value-t(i-20))/20;
-% 				slopebkwd = (t(i+20)-value)/20;
-% 				if(slopefwd > 0 && slopebkwd < 0)
-% 					% disp(value);
-% 				end
-% 			end
-% 		end
-
-% 	% are we less than 0
-% 	elseif value<0
-% 		if ((i>20) && (i<(sizet-20)))
-% 			neighborhood = t(i-20:i+20);
-% 			largest = max(neighborhood);
-
-% 			% are we less than (or equal to) surrounding neighborhood (i.e. local minima)
-% 			if value >= largest
+			% are we less than (or equal to) surrounding neighborhood (i.e. local minima)
+			if value >= largest
 				
-% 				% check slope (might be redundant)
-% 				slopefwd  = (value-t(i-20))/20;
-% 				slopebkwd = (t(i+20)-value)/20;
-% 				if(slopefwd < 0 && slopebkwd > 0)
-% 					% disp(value);
-% 				end
+				% check slope (might be redundant)
+				slopefwd  = (value-t(i-20))/20;
+				slopebkwd = (t(i+20)-value)/20;
+				if(slopefwd < 0 && slopebkwd > 0)
+					% disp(value);
+				end
 
-% 			end
-% 		end
-% 	end
-% end
+			end
+		end
+	end
+end
 
 
