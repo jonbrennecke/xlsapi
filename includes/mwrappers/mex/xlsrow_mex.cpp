@@ -39,14 +39,31 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
     /* get the cells as an array of chars */
+    // if(!strcmp("cells", cmd)) 
+    // {
+    //     const char *str[row->cells.size()];
+    //     for(int i=0;i<row->cells.size();i++)
+    //     {
+    //         str[i] = row->cells[i]->getValue().c_str();
+    //     }
+    //     plhs[0] = mxCreateCharMatrixFromStrings(row->cells.size(), (const char **)str);
+    //     return;
+    // }
+
+    /* get the cells as an array of chars */
     if(!strcmp("cells", cmd)) 
     {
-        const char *str[row->cells.size()];
+        std::vector<const char*> info;
         for(int i=0;i<row->cells.size();i++)
-        {
-            str[i] = row->cells[i]->getValue().c_str();
+            info.push_back(row->cells[i]->getValue().c_str());
+        const char *str[info.size()];
+        const mwSize ndim=1, dims[]={info.size()}; 
+        mxArray *mx = mxCreateCellArray(ndim,dims);
+        for(int i=0;i<info.size();i++) {
+            mxArray* value = mxCreateString(info[i]);
+            mxSetCell(mx,i,value);
         }
-        plhs[0] = mxCreateCharMatrixFromStrings(row->cells.size(), (const char **)str);
+        plhs[0] = mx;
         return;
     }
 
