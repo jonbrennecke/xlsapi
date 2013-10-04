@@ -24,34 +24,34 @@ header = sheet.getRow('0');
 row = sheet.getRow('1');
 
 % open and initialize the second excel doc (output)
-xlsapp2 = xlsstream;
-sheet2 = xlsworksheet;
-xlsapp2.addWorksheet(sheet2);
+% xlsapp2 = xlsstream;
+% sheet2 = xlsworksheet;
+% xlsapp2.addWorksheet(sheet2);
 
-% create the new header
-cells = header.cells;
-newHeader = cells(1:7);
-newHeader{8} = 'Trig-Max1-Time';
-newHeader{9} = 'Trig-Max1-Potential';
-newHeader{10} = 'Trig-Min1-Time';
-newHeader{11} = 'Trig-Min1-Potential';
-newHeader{12} = 'Trig-Max2-Time';
-newHeader{13} = 'Trig-Max2-Potential';
-newHeader{14} = 'Rand-Max1-Time';
-newHeader{15} = 'Rand-Max1-Potential';
-newHeader{16} = 'Rand-Min1-Time';
-newHeader{17} = 'Rand-Min1-Potential';
-newHeader{18} = 'Rand-Max2-Time';
-newHeader{19} = 'Rand-Max2-Potential';
-r = xlsrow;
-r.addCellsFromStrings(newHeader);
-sheet2.addRow(r);
+% % create the new header
+% cells = header.cells;
+% newHeader = cells(1:7);
+% newHeader{8} = 'Trig-Max1-Time';
+% newHeader{9} = 'Trig-Max1-Potential';
+% newHeader{10} = 'Trig-Min1-Time';
+% newHeader{11} = 'Trig-Min1-Potential';
+% newHeader{12} = 'Trig-Max2-Time';
+% newHeader{13} = 'Trig-Max2-Potential';
+% newHeader{14} = 'Rand-Max1-Time';
+% newHeader{15} = 'Rand-Max1-Potential';
+% newHeader{16} = 'Rand-Min1-Time';
+% newHeader{17} = 'Rand-Min1-Potential';
+% newHeader{18} = 'Rand-Max2-Time';
+% newHeader{19} = 'Rand-Max2-Potential';
+% r = xlsrow;
+% r.addCellsFromStrings(newHeader);
+% sheet2.addRow(r);
 
-% for every row, create a mouse object
-m = mouse(row);
-sizen = row.numel();
-sizet = numel(m.trig);
-sizer = numel(m.rand);
+% % for every row, create a mouse object
+% m = mouse(row);
+% sizen = row.numel();
+% sizet = numel(m.trig);
+% sizer = numel(m.rand);
 
 % loop through trigger values
 % for i=1:sizet
