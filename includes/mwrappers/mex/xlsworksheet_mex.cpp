@@ -52,6 +52,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     if(!strcmp("addRow", cmd))
     {
         XlsRow* row = convertMat2Ptr<XlsRow>(prhs[2]);
+        mexPrintf("count 3: %d\n", row->cells.size());
         xls->addRow(row);
         // plhs[0] = convertPtr2Mat<XlsRow>(row);
         return;

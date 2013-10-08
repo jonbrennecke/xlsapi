@@ -12,7 +12,7 @@ XlsCell::XlsCell()
 }
 
 /* Alternate constructor */
-XlsCell::XlsCell(std::string& str)
+XlsCell::XlsCell(std::string str)
 {
     this->header = "\t\t<Cell><Data ss:Type=\"String\">";
     this->footer = "</Data></Cell>\n";

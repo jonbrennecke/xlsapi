@@ -1,5 +1,6 @@
 #include "xlsrow.h"
 #include "xlstable.h"
+#include "../mex/mex.h"
 #include "../rapidxml-1.13/rapidxml.hpp"
 #include <vector>
 #include <string>
@@ -138,7 +139,7 @@ void XlsRow::setCell(int i, std::string value)
 std::string XlsRow::str()
 {
     std::string s;
-    for(unsigned int i=0;i<this->cells.size();i++)
+    for(int i=0;i<this->cells.size();i++)
     {
         s += this->cells[i]->str();
     }

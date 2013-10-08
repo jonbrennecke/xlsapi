@@ -1,6 +1,6 @@
 %===========================================================================
 %
-% EXAMPLE OF USING XLSSTREAM MEX WRAPPERS LIBRARY
+% EXAMPLE
 % 
 % code by Jon Brennecke 
 % - brennecke.jonathan@wsu.edu
@@ -20,80 +20,105 @@ clear
 xlsapp = xlsstream;
 xlsapp.fromXlsx('PeakDetector.xlsx');
 sheet = xlsapp.getSheet('1');
+numrows = 5;
+
+% create the new header
+sheet2 = xlsworksheet;
 header = sheet.getRow('0');
-row = sheet.getRow('1');
+cells = header.cells;
+newHeader = cells(1:7);
+newHeader{end+1} = 'Trig-Max1-Time';
+newHeader{end+1} = 'Trig-Max1-Potential';
+newHeader{end+1} = 'Trig-Min1-Time';
+newHeader{end+1} = 'Trig-Min1-Potential';
+newHeader{end+1} = 'Trig-Max2-Time';
+newHeader{end+1} = 'Trig-Max2-Potential';
+newHeader{end+1} = 'Rand-Max1-Time';
+newHeader{end+1} = 'Rand-Max1-Potential';
+newHeader{end+1} = 'Rand-Min1-Time';
+newHeader{end+1} = 'Rand-Min1-Potential';
+newHeader{end+1} = 'Rand-Max2-Time';
+newHeader{end+1} = 'Rand-Max2-Potential';
+
+r = xlsrow;
+r.addCellsFromStrings(newHeader);
+sheet2.addRow(r);
+
+rows = {};
+
+% loop through the rows and create the max/min data
+for k=1:numrows
+
+	% for every row, create a new 'mouse' object
+	row = sheet.getRow(num2str(k));
+	m = mouse(row);
+
+	% create some arrays to hold the data
+	randmax = {};
+	randmin = {};
+	trigmax = {};
+	trigmin = {};
+
+	% loop through rand/trig
+	sections = { m.trig, m.rand };
+	for n=1:2, section = sections{n};
+
+		% loop through section (rand or trigger) values
+		for i=1:numel(section)
+			value = section(i);
+
+			% are we greater than 0?
+			if value>0
+				if ((i>20) && (i<(numel(section)-20)))
+					neighborhood = section(i-20:i+20);
+					largest = max(neighborhood);
+
+					% are we greater than or equal to the values in the surrounding neighborhood? (i.e. local maxima)
+					if value >= largest
+						if mod(n,2) trigmax{end+1} = value;
+						else randmax{end+1} = value;
+						end
+					end
+				end
+
+			% are we less than 0?
+			elseif value<0
+				if ((i>20) && (i<(numel(section)-20)))
+					neighborhood = section(i-20:i+20);
+					largest = min(neighborhood);
+
+					% are we less than or equal to the values in the surrounding neighborhood? (i.e. local minima)
+					if value <= largest
+						if mod(n,2) trigmin{end+1} = value;
+						else randmin{end+1} = value;
+						end
+					end
+				end
+			end % end 'are we less/greater than 0?'
+		end % end 'loop through values'
+	end % end 'loop through rand/trig'
+
+	% find max
+	trigmax = max(cellfun(@(x) x, trigmax));
+	trigmin = max(cellfun(@(x) x, trigmin));
+	randmax = max(cellfun(@(x) x, randmax));
+	randmin = max(cellfun(@(x) x, randmin));
+
+	% create row from data and append to the worksheet
+	rowdata = m.data;
+	rowdata{end+1} = num2str(trigmax);
+	rowdata{end+1} = num2str(trigmin);
+	rowdata{end+1} = num2str(randmax);
+	rowdata{end+1} = num2str(randmin);
+	rows{end+1} = xlsrow;
+	rows{end}.addCellsFromStrings(rowdata);
+	sheet2.addRow(rows{end});
+
+
+end % end 'loop though rows'
 
 % open and initialize the second excel doc (output)
-% xlsapp2 = xlsstream;
-% sheet2 = xlsworksheet;
-% xlsapp2.addWorksheet(sheet2);
-
-% % create the new header
-% cells = header.cells;
-% newHeader = cells(1:7);
-% newHeader{8} = 'Trig-Max1-Time';
-% newHeader{9} = 'Trig-Max1-Potential';
-% newHeader{10} = 'Trig-Min1-Time';
-% newHeader{11} = 'Trig-Min1-Potential';
-% newHeader{12} = 'Trig-Max2-Time';
-% newHeader{13} = 'Trig-Max2-Potential';
-% newHeader{14} = 'Rand-Max1-Time';
-% newHeader{15} = 'Rand-Max1-Potential';
-% newHeader{16} = 'Rand-Min1-Time';
-% newHeader{17} = 'Rand-Min1-Potential';
-% newHeader{18} = 'Rand-Max2-Time';
-% newHeader{19} = 'Rand-Max2-Potential';
-% r = xlsrow;
-% r.addCellsFromStrings(newHeader);
-% sheet2.addRow(r);
-
-% % for every row, create a mouse object
-% m = mouse(row);
-% sizen = row.numel();
-% sizet = numel(m.trig);
-% sizer = numel(m.rand);
-
-% loop through trigger values
-% for i=1:sizet
-% 	value = t(i);
-
-% 	% are we greater than 0
-% 	if value>0
-% 		if ((i>20) && (i<(sizet-20)))
-% 			neighborhood = t(i-20:i+20);
-% 			largest = max(neighborhood);
-
-% 			% are we greater than (or equal to) surrounding neighborhood (i.e. local maxima)
-% 			if value >= largest
-
-% 				% check slope  (might be redundant)
-% 				slopefwd  = (value-t(i-20))/20;
-% 				slopebkwd = (t(i+20)-value)/20;
-% 				if(slopefwd > 0 && slopebkwd < 0)
-% 					% disp(value);
-% 				end
-% 			end
-% 		end
-
-% 	% are we less than 0
-% 	elseif value<0
-% 		if ((i>20) && (i<(sizet-20)))
-% 			neighborhood = t(i-20:i+20);
-% 			largest = max(neighborhood);
-
-% 			% are we less than (or equal to) surrounding neighborhood (i.e. local minima)
-% 			if value >= largest
-				
-% 				% check slope (might be redundant)
-% 				slopefwd  = (value-t(i-20))/20;
-% 				slopebkwd = (t(i+20)-value)/20;
-% 				if(slopefwd < 0 && slopebkwd > 0)
-% 					% disp(value);
-% 				end
-
-% 			end
-% 		end
-% 	end
-% end
-
-% xlsapp2.saveXls('test.xls');
+xlsapp2 = xlsstream;
+xlsapp2.addWorksheet(sheet2);
+xlsapp2.saveXls('test.xls');
+disp('done');

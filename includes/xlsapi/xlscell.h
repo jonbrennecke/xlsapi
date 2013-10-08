@@ -7,7 +7,7 @@ class XlsCell
 {
 public:
     XlsCell();
-    XlsCell(std::string&);
+    XlsCell(std::string);
     ~XlsCell();
     void setValue(std::string);
     void setColor(std::string);
