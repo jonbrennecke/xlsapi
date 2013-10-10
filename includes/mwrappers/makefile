@@ -1,12 +1,10 @@
-#==========================================================
-# Makefile install script for GNU Make
-# 
-# code by Jon Brennecke 
-# - brennecke.jonathan@wsu.edu
-# - http://github.com/jonbrennecke
-#==========================================================
+#########################################################
+##
+##
+##
+#########################################################
 
-PROJECT = mwrappers
+PROJECT = mouse_mex
 CC = gcc
 CXX = g++
 CFLAGS = -Wall -pedantic
@@ -24,11 +22,11 @@ CXXFILES = $(XLSAPI)
 CXXOUTFILES = $(subst .cpp,.o, $(XLSAPI))
 OPATH = ./build/
 OUTDIR = ./mex/
-MEXDIR = ./mexa64/
 OLIST = $(addprefix $(OPATH),$(subst .cpp,.o, $(XLSAPI)))
-MAIN = xlsstream xlsrow xlsworksheet mouse
+MAIN = ./mex/mouse_mex.cpp
+MAINOBJ = $(subst .cpp,.o,$(MAIN))
 
-all: $(MAIN)
+all: mex
 
 mouse: $(CXXFILES)
 	$(CXX) $(CXXFLAGS) -o $(OPATH)$(subst .cpp,.o,$(MOUSE)) -c $(MOUSEDIR)$(MOUSE)
@@ -36,6 +34,10 @@ mouse: $(CXXFILES)
 $(CXXFILES):
 	$(CXX) $(CXXFLAGS) -o $(addprefix $(OPATH),$(subst .cpp,.o, $@)) -c $(addprefix $(INCLPATH)xlsapi/, $@) 
 
-$(MAIN): mouse
-	$(CXX) $(CXXFLAGS) -o $(addprefix $(OPATH),$(addsuffix _mex.o, $@)) -c $(addprefix $(OUTDIR),$(addsuffix _mex.cpp, $@))
-	$(MEX) $(MEXFLAGS) -lm $(addprefix $(OPATH),$(subst .cpp,.o, $(CXXFILES))) $(OPATH)$(subst .cpp,.o,$(MOUSE)) $(MAINOBJ) -outdir $(MEXDIR) -output $(addsuffix _mex, $@)
+main: mouse
+	$(CXX) $(CXXFLAGS) -o $(MAINOBJ) -c $(MAIN)
+
+mex: main
+	$(MEX) $(MEXFLAGS) -lm $(addprefix $(OPATH),$(subst .cpp,.o, $(CXXFILES))) $(OPATH)$(subst .cpp,.o,$(MOUSE)) $(MAINOBJ) -outdir $(OUTDIR) -output $(PROJECT)
+
+

@@ -1,3 +1,4 @@
+#include "../mex/mex.h"
 #include "../sys/sys.hpp"
 #include "mouse.h"
 #include <string>
@@ -17,6 +18,7 @@ Mouse::Mouse(XlsRow* row)
 {
 	// initialize member vars
 	this->gender = row->cells[0]->getValue()[0];
+	// mexPrintf(this->gender);
 	this->filename = row->cells[1]->getValue();
 	this->strain = row->cells[2]->getValue();
 	this->id = atoi(row->cells[3]->getValue().c_str());
@@ -27,7 +29,7 @@ Mouse::Mouse(XlsRow* row)
 	// loop through trigger and random values and push_back their respective vectors
 	int i = 8;
 	std::string value = row->cells[7]->getValue();
-	while(!value.empty()) {
+	while(i<408) {
 		this->trig.push_back(atof(value.c_str()));
 		value = row->cells[i]->getValue();
 		i++;
@@ -61,14 +63,16 @@ std::vector<char*> Mouse::getData()
 	v.push_back((char*)ss.str().c_str());
 
 	v.push_back((char*)this->group.c_str());
-
-	ss.str(std::string());
-	ss << this->transgender;
-	v.push_back((char*)ss.str().c_str());
+	v.push_back((this->transgender)?(char*)"Yes":(char*)"No");
 
 	ss.str(std::string());
 	ss << this->intensity;
 	v.push_back((char*)ss.str().c_str());
-	
+
+	// for(int i=0;i<v.size();i++)
+	// {
+	// 	mexPrintf(v[i]);
+	// }
+	// mexPrintf((const char*)"\n");	
 	return v;
 }

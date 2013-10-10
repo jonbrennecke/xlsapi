@@ -19,26 +19,22 @@ clear
 % open and initialize the first excel doc (input)
 xlsapp = xlsstream;
 xlsapp.fromXlsx('PeakDetector.xlsx');
-sheet = xlsapp.getSheet('1');
-numrows = 5;
+sheet = xlsapp.getSheet('13');
+numrows = 60;
 
 % create the new header
 sheet2 = xlsworksheet;
 header = sheet.getRow('0');
 cells = header.cells;
 newHeader = cells(1:7);
-newHeader{end+1} = 'Trig-Max1-Time';
-newHeader{end+1} = 'Trig-Max1-Potential';
-newHeader{end+1} = 'Trig-Min1-Time';
-newHeader{end+1} = 'Trig-Min1-Potential';
-newHeader{end+1} = 'Trig-Max2-Time';
-newHeader{end+1} = 'Trig-Max2-Potential';
-newHeader{end+1} = 'Rand-Max1-Time';
-newHeader{end+1} = 'Rand-Max1-Potential';
-newHeader{end+1} = 'Rand-Min1-Time';
-newHeader{end+1} = 'Rand-Min1-Potential';
-newHeader{end+1} = 'Rand-Max2-Time';
-newHeader{end+1} = 'Rand-Max2-Potential';
+newHeader{end+1} = 'Trig-Max-Time';
+newHeader{end+1} = 'Trig-Max-Potential';
+newHeader{end+1} = 'Trig-Min-Time';
+newHeader{end+1} = 'Trig-Min-Potential';
+newHeader{end+1} = 'Rand-Max-Time';
+newHeader{end+1} = 'Rand-Max-Potential';
+newHeader{end+1} = 'Rand-Min-Time';
+newHeader{end+1} = 'Rand-Min-Potential';
 
 r = xlsrow;
 r.addCellsFromStrings(newHeader);
@@ -75,8 +71,12 @@ for k=1:numrows
 
 					% are we greater than or equal to the values in the surrounding neighborhood? (i.e. local maxima)
 					if value >= largest
-						if mod(n,2) trigmax{end+1} = value;
-						else randmax{end+1} = value;
+						if mod(n,2) 
+							trigmax{end+1} = value;
+							trigmax_time = header.cells{8+i};
+						else 
+							randmax{end+1} = value;
+							randmax_time = header.cells{408+i};
 						end
 					end
 				end
@@ -89,8 +89,13 @@ for k=1:numrows
 
 					% are we less than or equal to the values in the surrounding neighborhood? (i.e. local minima)
 					if value <= largest
-						if mod(n,2) trigmin{end+1} = value;
-						else randmin{end+1} = value;
+						if mod(n,2) 
+							trigmin{end+1} = value;
+							trigmin_time = header.cells{8+i};
+
+						else 
+							randmin{end+1} = value;
+							randmin_time = header.cells{408+i};
 						end
 					end
 				end
@@ -99,6 +104,10 @@ for k=1:numrows
 	end % end 'loop through rand/trig'
 
 	% find max
+	trigmax_time = strsplit(trigmax_time,' ');
+	trigmin_time = strsplit(trigmin_time,' '); 
+	randmax_time = strsplit(randmax_time,' ');
+	randmin_time = strsplit(randmin_time,' ');
 	trigmax = max(cellfun(@(x) x, trigmax));
 	trigmin = max(cellfun(@(x) x, trigmin));
 	randmax = max(cellfun(@(x) x, randmax));
@@ -106,14 +115,17 @@ for k=1:numrows
 
 	% create row from data and append to the worksheet
 	rowdata = m.data;
+	rowdata{end+1} = trigmax_time{end};
 	rowdata{end+1} = num2str(trigmax);
+	rowdata{end+1} = trigmin_time{end};
 	rowdata{end+1} = num2str(trigmin);
+	rowdata{end+1} = randmax_time{end};
 	rowdata{end+1} = num2str(randmax);
+	rowdata{end+1} = randmin_time{end};
 	rowdata{end+1} = num2str(randmin);
 	rows{end+1} = xlsrow;
 	rows{end}.addCellsFromStrings(rowdata);
 	sheet2.addRow(rows{end});
-
 
 end % end 'loop though rows'
 
